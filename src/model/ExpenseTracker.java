@@ -1,11 +1,11 @@
 package model;
 
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public final class ExpenseTracker {
 
-  private final LinkedHashSet<Expense> expenses = new LinkedHashSet<>();
+  private final ArrayList<Expense> expenses = new ArrayList<>();
 
   public ExpenseTracker() {
     // empty constructor
@@ -14,13 +14,20 @@ public final class ExpenseTracker {
   // MODIFIES: NOTHING
   // EFFECTS: creates a **copy** of the expense tracker's expense list and returns a view into that state
   public ExpenseTrackerView getExpenses() {
-    return new ExpenseTrackerView(List.copyOf(expenses));
+    return new ExpenseTrackerView(expenses);
   }
 
   // MODIFIES: the expense tracker's expense list
   // EFFECTS: tries to add an expense to the expense tracker, returns true on success, false on duplicate
   public boolean addExpense(Expense expense) {
-    return expenses.add(expense);
+    if (expenses.contains(expense)) {
+      return false;
+    } else {
+      expenses.add(expense);
+      // NOTE: always sort expenses after mutation
+      Collections.sort(expenses);
+      return true;
+    }
   }
 
   // MODIFIES: the expense tracker's expense list

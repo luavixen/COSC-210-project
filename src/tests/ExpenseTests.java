@@ -142,4 +142,16 @@ public final class ExpenseTests {
     assertEquals("2025-01-01\tGroceries\t-$20.00\tSave-On Foods", expense.toString());
   }
 
+  @Test
+  void testCompareTo_sameDate() {
+    Expense expense2 = new Expense(LocalDate.parse("2025-01-01"), Category.OTHER, BigDecimal.valueOf(100), "Test");
+    assertEquals(0, expense.compareTo(expense2));
+  }
+
+  @Test
+  void testCompareTo_differentDate() {
+    Expense expense2 = new Expense(LocalDate.parse("2025-01-02"), Category.OTHER, BigDecimal.valueOf(100), "Test");
+    assertTrue(expense.compareTo(expense2) < 0);
+  }
+
 }

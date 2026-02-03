@@ -5,7 +5,7 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 
-public final class Expense {
+public final class Expense implements Comparable<Expense> {
 
   private LocalDate date;
   private Category category;
@@ -60,6 +60,11 @@ public final class Expense {
       NumberFormat.getCurrencyInstance(Locale.CANADA).format(amount),
       description
     );
+  }
+
+  @Override
+  public int compareTo(Expense that) {
+    return this.date.compareTo(that.date);
   }
 
 }
