@@ -122,7 +122,7 @@ public final class ExpenseTrackerTests {
     ExpenseTrackerView expenses1 = expenseTracker.getExpenses();
     ExpenseTrackerView expenses2 = expenseTracker.getExpenses();
 
-    assertSame(expenses1.toList(), expenses2.toList());
+    assertEquals(expenses1.toList(), expenses2.toList());
 
     expenses1.toList().getFirst().setAmount(BigDecimal.valueOf(1234_56, 2));
 

@@ -5,40 +5,48 @@ import java.time.LocalDate;
 
 public final class Expense {
 
+  private LocalDate date;
+  private Category category;
+  private BigDecimal amount;
+  private String description;
+
   public Expense(LocalDate date, Category category, BigDecimal amount, String description) {
-    throw new AssertionError();
+    this.date = date;
+    this.category = category;
+    this.amount = amount;
+    this.description = description;
   }
 
   public LocalDate getDate() {
-    throw new AssertionError();
+    return date;
   }
 
   public void setDate(LocalDate date) {
-    throw new AssertionError();
+    this.date = date;
   }
 
   public Category getCategory() {
-    throw new AssertionError();
+    return category;
   }
 
   public void setCategory(Category category) {
-    throw new AssertionError();
+    this.category = category;
   }
 
   public BigDecimal getAmount() {
-    throw new AssertionError();
+    return amount;
   }
 
   public void setAmount(BigDecimal amount) {
-    throw new AssertionError();
+    this.amount = amount;
   }
 
   public String getDescription() {
-    throw new AssertionError();
+    return description;
   }
 
   public void setDescription(String description) {
-    throw new AssertionError();
+    this.description = description;
   }
 
 }
