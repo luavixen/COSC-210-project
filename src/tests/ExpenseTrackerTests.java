@@ -203,6 +203,31 @@ public final class ExpenseTrackerTests {
   }
 
   @Test
+  void testAddExpense_addedOutOfOrder() {
+    ExpenseTracker tracker = new ExpenseTracker();
+    Expense expense1 = new Expense(
+      LocalDate.parse("2025-03-01"),
+      Category.GROCERIES,
+      BigDecimal.valueOf(50_00, 2),
+      "Groceries"
+    );
+    Expense expense2 = new Expense(
+      LocalDate.parse("2025-03-02"),
+      Category.DINING,
+      BigDecimal.valueOf(15_00, 2),
+      "Lunch"
+    );
+
+    assertTrue(tracker.addExpense(expense2)); // 2nd expense first !!
+    assertTrue(tracker.addExpense(expense1)); // 1st expense second !!
+
+    List<Expense> expenses = tracker.getExpenses().toList(); // should NOT fail
+
+    assertEquals(expense1, expenses.get(0));
+    assertEquals(expense2, expenses.get(1));
+  }
+
+  @Test
   void testDeleteExpense_basic() {
     List<Expense> expenses = expenseTracker.getExpenses().toList();
     Expense expenseToDelete = expenses.getFirst();
