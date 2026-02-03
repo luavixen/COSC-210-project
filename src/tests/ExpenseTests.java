@@ -118,4 +118,28 @@ public final class ExpenseTests {
     assertEquals(description, expense.getDescription());
   }
 
+  @Test
+  void testToString_basic() {
+    assertEquals("2025-01-01\tGroceries\t$120.00\tSave-On Foods", expense.toString());
+  }
+
+  @Test
+  void testToString_emptyDescription() {
+    expense.setDescription("");
+    assertEquals("2025-01-01\tGroceries\t$120.00\t", expense.toString());
+  }
+
+  @Test
+  void testToString_longDescription() {
+    String description = "I went on a run to the grocery store and got ingredients to make burgers";
+    expense.setDescription(description);
+    assertEquals("2025-01-01\tGroceries\t$120.00\t" + description, expense.toString());
+  }
+
+  @Test
+  void testToString_negativeAmount() {
+    expense.setAmount(BigDecimal.valueOf(-20));
+    assertEquals("2025-01-01\tGroceries\t-$20.00\tSave-On Foods", expense.toString());
+  }
+
 }

@@ -1,7 +1,9 @@
 package model;
 
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 
 public final class Expense {
 
@@ -47,6 +49,17 @@ public final class Expense {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+      "%s\t%s\t%s\t%s",
+      date,
+      category.getDisplayName(),
+      NumberFormat.getCurrencyInstance(Locale.CANADA).format(amount),
+      description
+    );
   }
 
 }

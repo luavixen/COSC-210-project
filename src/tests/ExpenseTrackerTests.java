@@ -182,6 +182,27 @@ public final class ExpenseTrackerTests {
   }
 
   @Test
+  void testAddExpense_duplicateButNotEqual() {
+    ExpenseTracker tracker = new ExpenseTracker();
+    Expense expense1 = new Expense(
+      LocalDate.parse("2025-03-01"),
+      Category.OTHER,
+      BigDecimal.valueOf(100_00, 2),
+      "Test"
+    );
+    Expense expense2 = new Expense(
+      LocalDate.parse("2025-03-01"),
+      Category.OTHER,
+      BigDecimal.valueOf(100_00, 2),
+      "Test"
+    );
+
+    assertTrue(tracker.addExpense(expense1));
+    assertTrue(tracker.addExpense(expense2));
+    assertEquals(2, tracker.getExpenses().toList().size());
+  }
+
+  @Test
   void testDeleteExpense_basic() {
     List<Expense> expenses = expenseTracker.getExpenses().toList();
     Expense expenseToDelete = expenses.getFirst();
@@ -222,6 +243,31 @@ public final class ExpenseTrackerTests {
     assertTrue(expenseTracker.deleteExpense(expense));
     assertFalse(expenseTracker.deleteExpense(expense));
     assertEquals(9, expenseTracker.getExpenses().toList().size());
+  }
+
+  @Test
+  void testDeleteExpense_duplicateButNotEqual() {
+    ExpenseTracker tracker = new ExpenseTracker();
+
+    Expense expense1 = new Expense(
+      LocalDate.parse("2025-03-01"),
+      Category.OTHER,
+      BigDecimal.valueOf(100_00, 2),
+      "Test"
+    );
+
+    assertTrue(tracker.addExpense(expense1));
+
+    Expense expense2 = new Expense(
+      LocalDate.parse("2025-03-01"),
+      Category.OTHER,
+      BigDecimal.valueOf(100_00, 2),
+      "Test"
+    );
+
+    assertFalse(tracker.deleteExpense(expense2));
+
+    assertEquals(1, tracker.getExpenses().toList().size());
   }
 
 }
