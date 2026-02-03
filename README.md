@@ -41,3 +41,23 @@ It will have the following basic functions:
 I will target a specific audience: students. I will focus on creating a user-friendly interface and intuitive features that cater to the needs of students who are managing their finances and are stretched by the cost of living, like myself!
 
 This project is of interest to me as it would be nice to have a simple desktop application that can help me manage my expenses and stay within my budget, instead of relying on confusing Google Sheets spreadsheets that are difficult to use and prone to errors.
+
+## User Stories
+
+I've compiled a list of user stories that will guide the development of this project:
+
+1. As a user, I want to be able to add an **expense** with a <ins>date</ins>, <ins>category</ins>, <ins>amount</ins>, and <ins>description</ins> to my **expense tracker**
+2. As a user, I want to be able to view a list of all my **expenses**
+3. As a user, I want to be able to edit an existing **expense**'s fields *(<ins>date</ins>, <ins>category</ins>, <ins>amount</ins>, or <ins>description</ins>)*
+4. As a user, I want to be able to delete an **expense** from my **expense tracker**
+5. As a user, I want to be able to view a summary of my **expenses** grouped by <ins>category</ins>
+6. As a user, I want to be able to view my total spending within a specific date range *(<ins>date</ins>)*
+7. As a user, I want to be able to filter my **expenses** by <ins>category</ins> and date range *(<ins>date</ins>)* to see targeted spending summaries
+8. As a user, I want to be able to save my **expenses** and **expense tracker** to a file for later usage
+9. As a user, I want to be able to load up my previously saved **expenses** and **expense tracker** to continue tracking my finances without re-entering information
+
+Note that I've highlighted elements of the user stories for easy identification.
+- Classes are bolded
+- Class fields are underlined
+
+As this is a solo project, I *(Lua)* will be responsible for implementing all the features outlined in the user stories.
