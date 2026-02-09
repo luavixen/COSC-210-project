@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Category - represents an expense category like "rent", "utilities", or "groceries"
+ */
 public enum Category {
   GROCERIES,
   TRANSPORTATION,

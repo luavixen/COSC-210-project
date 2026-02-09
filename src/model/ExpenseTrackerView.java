@@ -3,6 +3,9 @@ package model;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Expense tracker view - represents a selection of expenses that were pulled from an expense tracker
+ */
 public final class ExpenseTrackerView {
 
   private final List<Expense> expenses;

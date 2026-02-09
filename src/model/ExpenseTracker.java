@@ -3,6 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Expense tracker - represents a mutable list of unique expenses
+ */
 public final class ExpenseTracker {
 
   private final ArrayList<Expense> expenses = new ArrayList<>();

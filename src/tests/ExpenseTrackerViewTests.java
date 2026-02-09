@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the ExpenseTrackerView class
+ */
 public final class ExpenseTrackerViewTests {
 
   @Test

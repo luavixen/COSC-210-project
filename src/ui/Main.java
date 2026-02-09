@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+/**
+ * Provides the console UI for this expense tracking desktop application
+ */
 public final class Main {
 
   private static final ExpenseTracker TRACKER = new ExpenseTracker();

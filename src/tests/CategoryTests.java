@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * Tests for the Category enum to confirm name functionality
+ */
 public final class CategoryTests {
 
   @Test

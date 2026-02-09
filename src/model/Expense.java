@@ -5,6 +5,9 @@ import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.Locale;
 
+/**
+ * Expense - represents an expense with a date, category, amount, and description
+ */
 public final class Expense implements Comparable<Expense> {
 
   private LocalDate date;

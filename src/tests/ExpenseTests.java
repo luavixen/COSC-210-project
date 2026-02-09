@@ -10,6 +10,9 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for the Expense class
+ */
 public final class ExpenseTests {
 
   private Expense expense;
