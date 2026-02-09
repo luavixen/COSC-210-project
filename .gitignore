@@ -1,2 +1,5 @@
 target/
 out/
+
+expenses.json
+test-expenses.json

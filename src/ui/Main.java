@@ -5,8 +5,12 @@ import model.Expense;
 import model.ExpenseTracker;
 import model.ExpenseTrackerView;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -41,7 +45,9 @@ public final class Main {
           case "4" -> deleteExpense();
           case "5" -> viewByCategory();
           case "6" -> viewByDateRange();
-          case "7" -> {
+          case "7" -> saveToFile();
+          case "8" -> loadFromFile();
+          case "9" -> {
             printGoodbye();
             running = false;
           }
@@ -68,7 +74,9 @@ public final class Main {
     System.out.println("4. Delete Expense");
     System.out.println("5. View by Category");
     System.out.println("6. View by Date Range");
-    System.out.println("7. Exit");
+    System.out.println("7. Save to File");
+    System.out.println("8. Load from File");
+    System.out.println("9. Exit");
     System.out.println();
     System.out.print("Enter your choice: ");
   }
@@ -202,6 +210,54 @@ public final class Main {
     displayExpenses(view.toList());
   }
 
+  private static void saveToFile() {
+    System.out.println("\n=== Save to File ===");
+
+    if (TRACKER.getExpenses().toList().isEmpty()) {
+      System.out.println("There are no expenses to save.\n");
+      return;
+    }
+
+    Path path = promptForPath("Enter file path to save to: ");
+    if (path == null) return;
+
+    try {
+      TRACKER.save(path);
+      System.out.println("Saved " + TRACKER.getExpenses().toList().size() + " expenses to " + path + "\n");
+    } catch (Exception e) {
+      System.out.println("Failed to write to " + path + ": " + e.getMessage() + "\n");
+    }
+  }
+
+  private static void loadFromFile() {
+    System.out.println("\n=== Load from File ===");
+
+    if (!TRACKER.getExpenses().toList().isEmpty()) {
+      System.out.println("There are currently " + TRACKER.getExpenses().toList().size() + " expenses being tracked.");
+      System.out.print("Loading from a file will overwrite these expenses. Are you sure? (y/n): ");
+      String confirm = SCANNER.nextLine().trim().toLowerCase();
+
+      if (!confirm.equals("y") && !confirm.equals("yes")) {
+        System.out.println("Operation cancelled.\n");
+        return;
+      }
+    }
+
+    Path path = promptForPath("Enter file path to load from: ");
+    if (path == null) return;
+
+    List<Expense> oldExpenses = TRACKER.getExpenses().toList();
+    try {
+      TRACKER.load(path);
+      for (Expense expense : oldExpenses) {
+        TRACKER.deleteExpense(expense);
+      }
+      System.out.println("Loaded " + TRACKER.getExpenses().toList().size() + " expenses from " + path + "\n");
+    } catch (Exception e) {
+      System.out.println("Failed to load from " + path + ": " + e.getMessage() + "\n");
+    }
+  }
+
   private static void displayExpenses(List<Expense> expenses) {
     if (expenses.isEmpty()) {
       System.out.println("No expenses found.\n");
@@ -292,6 +348,29 @@ public final class Main {
         System.out.println("Invalid number. Please enter a number between 1 and " + maxNumber + ".");
       } catch (NumberFormatException e) {
         System.out.println("Invalid input. Please enter a number or 'cancel'.");
+      }
+    }
+  }
+
+  private static Path promptForPath(String prompt) {
+    while (true) {
+      System.out.print(prompt);
+      String input = SCANNER.nextLine().trim();
+
+      if (input.equalsIgnoreCase("cancel")) {
+        System.out.println("Operation cancelled.\n");
+        return null;
+      }
+
+      try {
+        Path path = Path.of(input);
+        if (Path.of("").equals(path)) {
+          System.out.println("Path must not be empty");
+          continue;
+        }
+        return path;
+      } catch (InvalidPathException e) {
+        System.out.println("Invalid input. Please enter a file path or 'cancel'.");
       }
     }
   }

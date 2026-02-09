@@ -7,7 +7,10 @@ import model.ExpenseTrackerView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -296,6 +299,24 @@ public final class ExpenseTrackerTests {
     assertFalse(tracker.deleteExpense(expense2));
 
     assertEquals(1, tracker.getExpenses().toList().size());
+  }
+
+  @Test
+  void testSaveAndLoad() throws IOException {
+    Path path = Path.of("./test-expenses.json");
+
+    Files.deleteIfExists(path);
+
+    expenseTracker.save(path);
+
+    ExpenseTracker newTracker = new ExpenseTracker();
+
+    newTracker.load(path);
+
+    assertEquals(
+      newTracker.getExpenses().toList().toString(),
+      expenseTracker.getExpenses().toList().toString()
+    );
   }
 
 }
