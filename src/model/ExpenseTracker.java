@@ -1,26 +1,16 @@
 package model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.Strictness;
-import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
+import persistence.Persistence;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Expense tracker - represents a mutable list of unique expenses
  */
-public final class ExpenseTracker implements Persistent {
+public final class ExpenseTracker {
 
   private final ArrayList<Expense> expenses = new ArrayList<>();
 
@@ -53,43 +43,18 @@ public final class ExpenseTracker implements Persistent {
     return expenses.remove(expense);
   }
 
-  private static final class LocalDateAdapter extends TypeAdapter<LocalDate> {
-    @Override
-    public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
-      jsonWriter.value(localDate.toString());
-    }
-    @Override
-    public LocalDate read(JsonReader jsonReader) throws IOException {
-      return LocalDate.parse(jsonReader.nextString());
-    }
-  }
-
-  private static final Gson GSON = new GsonBuilder()
-    .setStrictness(Strictness.LENIENT)
-    .setPrettyPrinting()
-    .serializeNulls()
-    .registerTypeAdapter(LocalDate.class, new LocalDateAdapter().nullSafe())
-    .create();
-
-  private static final Type GSON_TYPE = new TypeToken<List<Expense>>() {}.getType();
-
   // MODIFIES: NOTHING
   // EFFECTS: saves the expense tracker's expense list to a file with the provided path
-  @Override
   public void save(Path path) throws IOException {
-    String json = GSON.toJson(expenses, GSON_TYPE);
-    Files.writeString(path, json);
+    Persistence.saveExpenseTrackerToFile(this, path);
   }
 
   // MODIFIES: the expense tracker's expense list
-  // EFFECTS: reads the file at the provided path as an expense list and calls addExpense for each expense in the file
-  @Override
+  // EFFECTS: reads the file at the provided path as an expense list,
+  //          empties this expense tracker,
+  //          and calls addExpense for each expense in the file
   public void load(Path path) throws IOException {
-    String json = Files.readString(path);
-    List<Expense> list = GSON.fromJson(json, GSON_TYPE);
-    for (Expense expense : list) {
-      addExpense(expense);
-    }
+    Persistence.restoreExpenseTrackerFromFile(this, path);
   }
 
 }

@@ -5,12 +5,10 @@ import model.Expense;
 import model.ExpenseTracker;
 import model.ExpenseTrackerView;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -246,12 +244,8 @@ public final class Main {
     Path path = promptForPath("Enter file path to load from: ");
     if (path == null) return;
 
-    List<Expense> oldExpenses = TRACKER.getExpenses().toList();
     try {
       TRACKER.load(path);
-      for (Expense expense : oldExpenses) {
-        TRACKER.deleteExpense(expense);
-      }
       System.out.println("Loaded " + TRACKER.getExpenses().toList().size() + " expenses from " + path + "\n");
     } catch (Exception e) {
       System.out.println("Failed to load from " + path + ": " + e.getMessage() + "\n");
