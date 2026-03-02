@@ -1,9 +1,6 @@
 package ui;
 
-import model.Category;
-import model.Expense;
-import model.ExpenseTracker;
-import model.ExpenseTrackerView;
+import model.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -189,7 +186,7 @@ public final class Main {
     Category category = promptForCategory();
 
     ExpenseTrackerView view = TRACKER.getExpenses().filterByCategory(category);
-    System.out.println("\n---- Expenses in " + category.getDisplayName() + " --------------------");
+    System.out.println("\n---- Expenses in " + category.getName() + " --------------------");
     displayExpenses(view.toList());
   }
 
@@ -286,10 +283,10 @@ public final class Main {
   }
 
   private static Category promptForCategory() {
-    Category[] categories = Category.values();
+    Category[] categories = KnownCategory.ALL_KNOWN_CATEGORIES.toArray(new Category[0]);
     System.out.println("\nCategories:");
     for (int i = 0; i < categories.length; i++) {
-      System.out.println((i + 1) + ". " + categories[i].getDisplayName());
+      System.out.println((i + 1) + ". " + categories[i].getName());
     }
 
     while (true) {

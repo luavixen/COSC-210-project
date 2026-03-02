@@ -1,8 +1,8 @@
 package tests;
 
-import model.Category;
 import model.Expense;
 import model.ExpenseTracker;
+import model.KnownCategory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public final class PersistenceTests {
   void setUp() {
     expense = new Expense(
       LocalDate.parse("2025-01-15"),
-      Category.EDUCATION,
+      KnownCategory.EDUCATION,
       BigDecimal.valueOf(45_00, 2),
       "COSC 222 textbook"
     );
@@ -40,21 +40,21 @@ public final class PersistenceTests {
 
     tracker.addExpense(new Expense(
       LocalDate.parse("2025-01-05"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(87_50, 2),
       "Safeway - weekly groceries"
     ));
 
     tracker.addExpense(new Expense(
       LocalDate.parse("2025-01-10"),
-      Category.TRANSPORTATION,
+      KnownCategory.TRANSPORTATION,
       BigDecimal.valueOf(100_00, 2),
       "Bus pass"
     ));
 
     tracker.addExpense(new Expense(
       LocalDate.parse("2025-01-12"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(15_75, 2),
       "Lunch at Koi Sushi"
     ));
@@ -65,7 +65,7 @@ public final class PersistenceTests {
     JSONObject json = Persistence.encodeExpense(expense);
 
     assertEquals("2025-01-15", json.getString("date"));
-    assertEquals("EDUCATION", json.getString("category"));
+    assertEquals("Education", json.getString("category"));
     assertEquals(BigDecimal.valueOf(45_00, 2), json.getBigDecimal("amount"));
     assertEquals("COSC 222 textbook", json.getString("description"));
   }
@@ -74,14 +74,14 @@ public final class PersistenceTests {
   void testDecodeExpense_basic() {
     JSONObject json = new JSONObject();
     json.put("date", "2025-01-15");
-    json.put("category", "EDUCATION");
+    json.put("category", "Education");
     json.put("amount", BigDecimal.valueOf(45_00, 2));
     json.put("description", "COSC 222 textbook");
 
     Expense decoded = Persistence.decodeExpense(json);
 
     assertEquals(LocalDate.parse("2025-01-15"), decoded.getDate());
-    assertEquals(Category.EDUCATION, decoded.getCategory());
+    assertEquals(KnownCategory.EDUCATION, decoded.getCategory());
     assertEquals(BigDecimal.valueOf(45_00, 2), decoded.getAmount());
     assertEquals("COSC 222 textbook", decoded.getDescription());
   }
@@ -140,13 +140,13 @@ public final class PersistenceTests {
     ExpenseTracker existingTracker = new ExpenseTracker();
     existingTracker.addExpense(new Expense(
       LocalDate.parse("2024-06-01"),
-      Category.RENT,
+      KnownCategory.RENT,
       BigDecimal.valueOf(1200_00, 2),
       "June rent"
     ));
     existingTracker.addExpense(new Expense(
       LocalDate.parse("2024-06-15"),
-      Category.UTILITIES,
+      KnownCategory.UTILITIES,
       BigDecimal.valueOf(75_00, 2),
       "Internet bill"
     ));

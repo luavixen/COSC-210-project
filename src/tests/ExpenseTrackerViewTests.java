@@ -1,8 +1,9 @@
 package tests;
 
-import model.Category;
+import model.CustomCategory;
 import model.Expense;
 import model.ExpenseTrackerView;
+import model.KnownCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +36,7 @@ public final class ExpenseTrackerViewTests {
 
     mutableList.add(new Expense(
       LocalDate.parse("2024-05-05"),
-      Category.TRAVEL,
+      KnownCategory.TRAVEL,
       BigDecimal.valueOf(380_23, 2),
       "Air Canada"
     ));
@@ -57,8 +58,8 @@ public final class ExpenseTrackerViewTests {
   @Test
   void testCtor_throwsOnUnsortedList() {
     List<Expense> unsortedList = List.of(
-      new Expense(LocalDate.parse("2024-09-01"), Category.RENT, BigDecimal.valueOf(1200_00, 2), "All Start Ct"),
-      new Expense(LocalDate.parse("2024-08-02"), Category.GROCERIES, BigDecimal.valueOf(180_00, 2), "Loblaws")
+      new Expense(LocalDate.parse("2024-09-01"), KnownCategory.RENT, BigDecimal.valueOf(1200_00, 2), "All Start Ct"),
+      new Expense(LocalDate.parse("2024-08-02"), KnownCategory.GROCERIES, BigDecimal.valueOf(180_00, 2), "Loblaws")
     );
     assertThrows(IllegalArgumentException.class, () -> new ExpenseTrackerView(unsortedList));
   }
@@ -69,31 +70,31 @@ public final class ExpenseTrackerViewTests {
   void setUp() {
     Expense groceryExpense = new Expense(
       LocalDate.parse("2024-08-02"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(180_00, 2),
       "Safeway"
     );
     Expense rentExpense = new Expense(
       LocalDate.parse("2024-09-01"),
-      Category.RENT,
+      KnownCategory.RENT,
       BigDecimal.valueOf(2300_00, 2),
       "Andrew Apartments"
     );
     Expense firstFoodExpense = new Expense(
       LocalDate.parse("2024-08-11"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(12_72, 2),
       "McDonald's"
     );
     Expense secondFoodExpense = new Expense(
       LocalDate.parse("2024-08-24"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(16_02, 2),
       "Subway"
     );
     Expense paymentExpense = new Expense(
       LocalDate.parse("2024-08-28"),
-      Category.PAYMENT,
+      KnownCategory.PAYMENT,
       BigDecimal.valueOf(200_00, 2),
       "Payment to Credit Card"
     );
@@ -128,7 +129,7 @@ public final class ExpenseTrackerViewTests {
   void testToList_cannotMutateView() {
     Expense newExpense = new Expense(
       LocalDate.parse("2026-02-02"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(20),
       "Gave my friend $20"
     );
@@ -178,40 +179,40 @@ public final class ExpenseTrackerViewTests {
 
   @Test
   void testFilterByCategory_basic() {
-    ExpenseTrackerView diningExpenses = expenseTrackerView.filterByCategory(Category.DINING);
+    ExpenseTrackerView diningExpenses = expenseTrackerView.filterByCategory(KnownCategory.DINING);
     assertEquals(2, diningExpenses.toList().size());
 
     for (Expense expense : diningExpenses.toList()) {
-      assertEquals(Category.DINING, expense.getCategory());
+      assertEquals(KnownCategory.DINING, expense.getCategory());
     }
   }
 
   @Test
   void testFilterByCategory_singleResult() {
-    ExpenseTrackerView rentExpenses = expenseTrackerView.filterByCategory(Category.RENT);
+    ExpenseTrackerView rentExpenses = expenseTrackerView.filterByCategory(KnownCategory.RENT);
     assertEquals(1, rentExpenses.toList().size());
-    assertEquals(Category.RENT, rentExpenses.toList().getFirst().getCategory());
+    assertEquals(KnownCategory.RENT, rentExpenses.toList().getFirst().getCategory());
   }
 
   @Test
   void testFilterByCategory_noResults() {
-    ExpenseTrackerView healthExpenses = expenseTrackerView.filterByCategory(Category.HEALTH);
+    ExpenseTrackerView healthExpenses = expenseTrackerView.filterByCategory(KnownCategory.HEALTH);
     assertEquals(0, healthExpenses.toList().size());
   }
 
   @Test
   void testFilterByCategory_chainedFilteringSame() {
     ExpenseTrackerView diningExpenses = expenseTrackerView
-      .filterByCategory(Category.DINING)
-      .filterByCategory(Category.DINING);
+      .filterByCategory(KnownCategory.DINING)
+      .filterByCategory(KnownCategory.DINING);
     assertEquals(2, diningExpenses.toList().size());
   }
 
   @Test
   void testFilterByCategory_chainedFilteringToNothing() {
     ExpenseTrackerView diningExpenses = expenseTrackerView
-      .filterByCategory(Category.DINING)
-      .filterByCategory(Category.TRAVEL);
+      .filterByCategory(KnownCategory.DINING)
+      .filterByCategory(KnownCategory.TRAVEL);
     assertEquals(0, diningExpenses.toList().size());
   }
 
@@ -269,11 +270,11 @@ public final class ExpenseTrackerViewTests {
   @Test
   void testChainedFilters_categoryThenDate() {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
-      .filterByCategory(Category.DINING)
+      .filterByCategory(KnownCategory.DINING)
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-20"));
 
     assertEquals(1, filteredExpenses.toList().size());
-    assertEquals(Category.DINING, filteredExpenses.toList().getFirst().getCategory());
+    assertEquals(KnownCategory.DINING, filteredExpenses.toList().getFirst().getCategory());
     assertEquals(LocalDate.parse("2024-08-11"), filteredExpenses.toList().getFirst().getDate());
   }
 
@@ -281,10 +282,10 @@ public final class ExpenseTrackerViewTests {
   void testChainedFilters_dateThenCategory() {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-20"))
-      .filterByCategory(Category.DINING);
+      .filterByCategory(KnownCategory.DINING);
 
     assertEquals(1, filteredExpenses.toList().size());
-    assertEquals(Category.DINING, filteredExpenses.toList().getFirst().getCategory());
+    assertEquals(KnownCategory.DINING, filteredExpenses.toList().getFirst().getCategory());
     assertEquals(LocalDate.parse("2024-08-11"), filteredExpenses.toList().getFirst().getDate());
   }
 
@@ -302,12 +303,12 @@ public final class ExpenseTrackerViewTests {
   @Test
   void testChainedFilters_complex() {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
-      .filterByCategory(Category.DINING)
+      .filterByCategory(KnownCategory.DINING)
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-31"))
       .limitToAmount(1);
 
     assertEquals(1, filteredExpenses.toList().size());
-    assertEquals(Category.DINING, filteredExpenses.toList().getFirst().getCategory());
+    assertEquals(KnownCategory.DINING, filteredExpenses.toList().getFirst().getCategory());
     assertEquals("McDonald's", filteredExpenses.toList().getFirst().getDescription());
   }
 

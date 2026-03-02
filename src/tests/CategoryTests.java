@@ -1,28 +1,38 @@
 package tests;
 
 import model.Category;
+import model.CustomCategory;
+import model.KnownCategory;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Tests for the Category enum to confirm name functionality
- */
 public final class CategoryTests {
 
   @Test
-  void testGetDisplayName() {
-    assertEquals("Groceries", Category.GROCERIES.getDisplayName());
-    assertEquals("Transportation", Category.TRANSPORTATION.getDisplayName());
-    assertEquals("Health", Category.HEALTH.getDisplayName());
-    assertEquals("Education", Category.EDUCATION.getDisplayName());
-    assertEquals("Utilities", Category.UTILITIES.getDisplayName());
-    assertEquals("Rent", Category.RENT.getDisplayName());
-    assertEquals("Dining", Category.DINING.getDisplayName());
-    assertEquals("Entertainment", Category.ENTERTAINMENT.getDisplayName());
-    assertEquals("Travel", Category.TRAVEL.getDisplayName());
-    assertEquals("Other", Category.OTHER.getDisplayName());
-    assertEquals("Payment", Category.PAYMENT.getDisplayName());
+  void testFromName_known() {
+    Category category = Category.fromName("Groceries");
+    assertFalse(category.isCustom());
+    assertEquals("Groceries", category.getName());
+  }
+
+  @Test
+  void testFromName_unknown() {
+    Category category = Category.fromName("My Awesome Category");
+    assertTrue(category.isCustom());
+    assertEquals("My Awesome Category", category.getName());
+  }
+
+  @Test
+  void testFromName_null() {
+    assertThrows(NullPointerException.class, () -> Category.fromName(null));
+  }
+
+  @Test
+  void testEquals_matchingKnownAndUnknown() {
+    Category knownCategory = KnownCategory.GROCERIES;
+    Category unknownCategory = new CustomCategory("Groceries");
+    assertEquals(knownCategory, unknownCategory);
   }
 
 }

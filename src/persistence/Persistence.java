@@ -26,7 +26,7 @@ public final class Persistence {
   public static JSONObject encodeExpense(Expense expense) {
     JSONObject jsonExpense = new JSONObject();
     jsonExpense.put("date", expense.getDate().toString());
-    jsonExpense.put("category", expense.getCategory().name());
+    jsonExpense.put("category", expense.getCategory().getName());
     jsonExpense.put("amount", expense.getAmount());
     jsonExpense.put("description", expense.getDescription());
     return jsonExpense;
@@ -37,7 +37,7 @@ public final class Persistence {
   public static Expense decodeExpense(JSONObject jsonExpense) {
     return new Expense(
       LocalDate.parse(jsonExpense.getString("date")),
-      Category.valueOf(jsonExpense.getString("category")),
+      Category.fromName(jsonExpense.getString("category")),
       jsonExpense.getBigDecimal("amount"),
       jsonExpense.getString("description")
     );

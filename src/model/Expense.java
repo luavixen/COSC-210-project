@@ -59,7 +59,7 @@ public final class Expense implements Comparable<Expense> {
     return String.format(
       "%s\t%s\t%s\t%s",
       date,
-      category.getDisplayName(),
+      category.getName(),
       NumberFormat.getCurrencyInstance(Locale.CANADA).format(amount),
       description
     );

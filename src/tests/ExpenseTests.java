@@ -1,7 +1,8 @@
 package tests;
 
-import model.Category;
+import model.CustomCategory;
 import model.Expense;
+import model.KnownCategory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +23,7 @@ public final class ExpenseTests {
   void setUp() {
     expense = new Expense(
       LocalDate.parse("2025-01-01"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(120),
       "Save-On Foods"
     );
@@ -53,20 +54,26 @@ public final class ExpenseTests {
 
   @Test
   void testGetCategory_basic() {
-    assertEquals(Category.GROCERIES, expense.getCategory());
+    assertEquals(KnownCategory.GROCERIES, expense.getCategory());
   }
 
   @Test
   void testSetCategory_differentCategory() {
-    expense.setCategory(Category.DINING);
-    assertEquals(Category.DINING, expense.getCategory());
+    expense.setCategory(KnownCategory.DINING);
+    assertEquals(KnownCategory.DINING, expense.getCategory());
   }
 
   @Test
   void testSetCategory_anotherCategory() {
-    expense.setCategory(Category.TRAVEL);
-    expense.setCategory(Category.ENTERTAINMENT);
-    assertEquals(Category.ENTERTAINMENT, expense.getCategory());
+    expense.setCategory(KnownCategory.TRAVEL);
+    expense.setCategory(KnownCategory.ENTERTAINMENT);
+    assertEquals(KnownCategory.ENTERTAINMENT, expense.getCategory());
+  }
+
+  @Test
+  void testSetCategory_customCategory() {
+    expense.setCategory(new CustomCategory("My Awesome Category"));
+    assertEquals("My Awesome Category", expense.getCategory().getName());
   }
 
   @Test
@@ -148,13 +155,13 @@ public final class ExpenseTests {
 
   @Test
   void testCompareTo_sameDate() {
-    Expense expense2 = new Expense(LocalDate.parse("2025-01-01"), Category.OTHER, BigDecimal.valueOf(100), "Test");
+    Expense expense2 = new Expense(LocalDate.parse("2025-01-01"), new CustomCategory("Other"), BigDecimal.valueOf(100), "Test");
     assertEquals(0, expense.compareTo(expense2));
   }
 
   @Test
   void testCompareTo_differentDate() {
-    Expense expense2 = new Expense(LocalDate.parse("2025-01-02"), Category.OTHER, BigDecimal.valueOf(100), "Test");
+    Expense expense2 = new Expense(LocalDate.parse("2025-01-02"), new CustomCategory("Other"), BigDecimal.valueOf(100), "Test");
     assertTrue(expense.compareTo(expense2) < 0);
   }
 

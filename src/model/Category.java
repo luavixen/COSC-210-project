@@ -1,29 +1,36 @@
 package model;
 
-/**
- * Category - represents an expense category like "rent", "utilities", or "groceries"
- */
-public enum Category {
-  GROCERIES,
-  TRANSPORTATION,
-  HEALTH,
-  EDUCATION,
-  UTILITIES,
-  RENT,
-  DINING,
-  ENTERTAINMENT,
-  TRAVEL,
-  OTHER,
-  PAYMENT;
+import java.util.Objects;
 
-  private final String displayName;
-  {
-    displayName =
-      name().charAt(0) +
-      name().substring(1).toLowerCase();
+public abstract class Category {
+
+  public abstract String getName();
+
+  public abstract boolean isCustom();
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof Category that
+        && Objects.equals(this.getName(), that.getName());
   }
 
-  public String getDisplayName() {
-    return displayName;
+  @Override
+  public String toString() {
+    if (isCustom()) {
+      return getName() + " (custom)";
+    } else {
+      return getName();
+    }
   }
+
+  public static Category fromName(String name) {
+    Objects.requireNonNull(name);
+    return KnownCategory.ALL_KNOWN_CATEGORIES
+      .stream()
+      .map(category -> (Category) category)
+      .filter(category -> category.getName().equals(name))
+      .findFirst()
+      .orElseGet(() -> new CustomCategory(name));
+  }
+
 }

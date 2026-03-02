@@ -1,9 +1,6 @@
 package tests;
 
-import model.Category;
-import model.Expense;
-import model.ExpenseTracker;
-import model.ExpenseTrackerView;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,70 +26,70 @@ public final class ExpenseTrackerTests {
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-05"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(87_50, 2),
       "Safeway - weekly groceries"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-10"),
-      Category.TRANSPORTATION,
+      KnownCategory.TRANSPORTATION,
       BigDecimal.valueOf(100_00, 2),
       "U-Pass monthly"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-12"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(15_75, 2),
       "Lunch at campus cafeteria"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-15"),
-      Category.EDUCATION,
+      KnownCategory.EDUCATION,
       BigDecimal.valueOf(45_00, 2),
       "COSC 210 textbook"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-18"),
-      Category.ENTERTAINMENT,
+      KnownCategory.ENTERTAINMENT,
       BigDecimal.valueOf(22_00, 2),
       "Movie tickets with friends"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-20"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(62_30, 2),
       "Save-On Foods"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-22"),
-      Category.UTILITIES,
+      KnownCategory.UTILITIES,
       BigDecimal.valueOf(75_00, 2),
       "Internet bill"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-01-25"),
-      Category.HEALTH,
+      KnownCategory.HEALTH,
       BigDecimal.valueOf(30_00, 2),
       "Pharmacy - cold medicine"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-02-01"),
-      Category.RENT,
+      KnownCategory.RENT,
       BigDecimal.valueOf(1200_00, 2),
       "February rent"
     ));
 
     expenseTracker.addExpense(new Expense(
       LocalDate.parse("2025-02-03"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(18_50, 2),
       "Starbucks - study session"
     ));
@@ -142,7 +139,7 @@ public final class ExpenseTrackerTests {
     ExpenseTracker tracker = new ExpenseTracker();
     Expense newExpense = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(25_00, 2),
       "Test expense"
     );
@@ -156,13 +153,13 @@ public final class ExpenseTrackerTests {
     ExpenseTracker tracker = new ExpenseTracker();
     Expense expense1 = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(50_00, 2),
       "Groceries"
     );
     Expense expense2 = new Expense(
       LocalDate.parse("2025-03-02"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(15_00, 2),
       "Lunch"
     );
@@ -177,7 +174,7 @@ public final class ExpenseTrackerTests {
     ExpenseTracker tracker = new ExpenseTracker();
     Expense expense = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(100_00, 2),
       "Test"
     );
@@ -192,13 +189,13 @@ public final class ExpenseTrackerTests {
     ExpenseTracker tracker = new ExpenseTracker();
     Expense expense1 = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(100_00, 2),
       "Test"
     );
     Expense expense2 = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(100_00, 2),
       "Test"
     );
@@ -213,13 +210,13 @@ public final class ExpenseTrackerTests {
     ExpenseTracker tracker = new ExpenseTracker();
     Expense expense1 = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.GROCERIES,
+      KnownCategory.GROCERIES,
       BigDecimal.valueOf(50_00, 2),
       "Groceries"
     );
     Expense expense2 = new Expense(
       LocalDate.parse("2025-03-02"),
-      Category.DINING,
+      KnownCategory.DINING,
       BigDecimal.valueOf(15_00, 2),
       "Lunch"
     );
@@ -257,7 +254,7 @@ public final class ExpenseTrackerTests {
   void testDeleteExpense_notPresent() {
     Expense nonExistentExpense = new Expense(
       LocalDate.parse("2099-12-31"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(999_99, 2),
       "Non-existent expense"
     );
@@ -282,7 +279,7 @@ public final class ExpenseTrackerTests {
 
     Expense expense1 = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(100_00, 2),
       "Test"
     );
@@ -291,7 +288,7 @@ public final class ExpenseTrackerTests {
 
     Expense expense2 = new Expense(
       LocalDate.parse("2025-03-01"),
-      Category.OTHER,
+      new CustomCategory("Other"),
       BigDecimal.valueOf(100_00, 2),
       "Test"
     );
