@@ -185,9 +185,15 @@ public final class Main {
     System.out.println("\n=== View by Category ===");
     Category category = promptForCategory();
 
-    ExpenseTrackerView view = TRACKER.getExpenses().filterByCategory(category);
-    System.out.println("\n---- Expenses in " + category.getName() + " --------------------");
-    displayExpenses(view.toList());
+    List<Expense> filteredExpenses = List.of();
+    try {
+      filteredExpenses = TRACKER.getExpenses().filterByCategory(category).toList();
+      System.out.println("\n---- Expenses in " + category.getName() + " --------------------");
+    } catch (FilterException e) {
+      System.out.println("Failed to filter by category: " + e.getMessage() + "\n");
+    } finally {
+      displayExpenses(filteredExpenses);
+    }
   }
 
   private static void viewByDateRange() {
@@ -200,9 +206,15 @@ public final class Main {
       return;
     }
 
-    ExpenseTrackerView view = TRACKER.getExpenses().filterByDateRange(startDate, endDate);
-    System.out.println("\n---- Expenses from " + startDate + " to " + endDate + " --------------------");
-    displayExpenses(view.toList());
+    List<Expense> filteredExpenses = List.of();
+    try {
+      filteredExpenses = TRACKER.getExpenses().filterByDateRange(startDate, endDate).toList();
+      System.out.println("\n---- Expenses from " + startDate + " to " + endDate + " --------------------");
+    } catch (FilterException e) {
+      System.out.println("Failed to filter by date range: " + e.getMessage() + "\n");
+    } finally {
+      displayExpenses(filteredExpenses);
+    }
   }
 
   private static void saveToFile() {

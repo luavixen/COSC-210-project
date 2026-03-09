@@ -1,9 +1,6 @@
 package tests;
 
-import model.CustomCategory;
-import model.Expense;
-import model.ExpenseTrackerView;
-import model.KnownCategory;
+import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,6 +25,15 @@ public final class ExpenseTrackerViewTests {
   void testCtor_empty() {
     ExpenseTrackerView view = new ExpenseTrackerView(List.of());
     assertEquals(0, view.toList().size());
+    assertEquals(List.of(), view.toList());
+  }
+
+  @Test
+  void testCtor_cannotFilterEmpty() {
+    ExpenseTrackerView view = new ExpenseTrackerView(List.of());
+    assertThrows(NoResultsFilterException.class, () -> view.filterByCategory(KnownCategory.DINING));
+    assertThrows(NoResultsFilterException.class, () -> view.filterByDateRange(LocalDate.parse("2024-02-01"), LocalDate.parse("2024-05-05")));
+    assertThrows(NoResultsFilterException.class, () -> view.limitToAmount(1));
   }
 
   @Test
@@ -61,7 +67,7 @@ public final class ExpenseTrackerViewTests {
       new Expense(LocalDate.parse("2024-09-01"), KnownCategory.RENT, BigDecimal.valueOf(1200_00, 2), "All Start Ct"),
       new Expense(LocalDate.parse("2024-08-02"), KnownCategory.GROCERIES, BigDecimal.valueOf(180_00, 2), "Loblaws")
     );
-    assertThrows(IllegalArgumentException.class, () -> new ExpenseTrackerView(unsortedList));
+    assertThrows(IllegalStateException.class, () -> new ExpenseTrackerView(unsortedList));
   }
 
   private ExpenseTrackerView expenseTrackerView;
@@ -155,30 +161,29 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testLimitToAmount_basic() {
+  void testLimitToAmount_basic() throws FilterException {
     ExpenseTrackerView firstThreeExpenses = expenseTrackerView.limitToAmount(3);
     assertEquals(3, firstThreeExpenses.toList().size());
   }
 
   @Test
   void testLimitToAmount_none() {
-    ExpenseTrackerView noExpenses = expenseTrackerView.limitToAmount(0);
-    assertEquals(0, noExpenses.toList().size());
+    assertThrows(InvalidArgumentFilterException.class, () -> expenseTrackerView.limitToAmount(0));
   }
 
   @Test
-  void testLimitToAmount_all() {
+  void testLimitToAmount_all() throws FilterException {
     ExpenseTrackerView allExpenses = expenseTrackerView.limitToAmount(100);
     assertEquals(5, allExpenses.toList().size());
   }
 
   @Test
   void testLimitToAmount_negative() {
-    assertThrows(IllegalArgumentException.class, () -> expenseTrackerView.limitToAmount(-1));
+    assertThrows(InvalidArgumentFilterException.class, () -> expenseTrackerView.limitToAmount(-1));
   }
 
   @Test
-  void testFilterByCategory_basic() {
+  void testFilterByCategory_basic() throws FilterException {
     ExpenseTrackerView diningExpenses = expenseTrackerView.filterByCategory(KnownCategory.DINING);
     assertEquals(2, diningExpenses.toList().size());
 
@@ -188,7 +193,12 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testFilterByCategory_singleResult() {
+  void testFilterByCategory_null() {
+    assertThrows(InvalidArgumentFilterException.class, () -> expenseTrackerView.filterByCategory(null));
+  }
+
+  @Test
+  void testFilterByCategory_singleResult() throws FilterException {
     ExpenseTrackerView rentExpenses = expenseTrackerView.filterByCategory(KnownCategory.RENT);
     assertEquals(1, rentExpenses.toList().size());
     assertEquals(KnownCategory.RENT, rentExpenses.toList().getFirst().getCategory());
@@ -196,12 +206,11 @@ public final class ExpenseTrackerViewTests {
 
   @Test
   void testFilterByCategory_noResults() {
-    ExpenseTrackerView healthExpenses = expenseTrackerView.filterByCategory(KnownCategory.HEALTH);
-    assertEquals(0, healthExpenses.toList().size());
+    assertThrows(NoResultsFilterException.class, () -> expenseTrackerView.filterByCategory(KnownCategory.HEALTH));
   }
 
   @Test
-  void testFilterByCategory_chainedFilteringSame() {
+  void testFilterByCategory_chainedFilteringSame() throws FilterException {
     ExpenseTrackerView diningExpenses = expenseTrackerView
       .filterByCategory(KnownCategory.DINING)
       .filterByCategory(KnownCategory.DINING);
@@ -210,14 +219,15 @@ public final class ExpenseTrackerViewTests {
 
   @Test
   void testFilterByCategory_chainedFilteringToNothing() {
-    ExpenseTrackerView diningExpenses = expenseTrackerView
-      .filterByCategory(KnownCategory.DINING)
-      .filterByCategory(KnownCategory.TRAVEL);
-    assertEquals(0, diningExpenses.toList().size());
+    assertThrows(NoResultsFilterException.class, () -> {
+      expenseTrackerView
+        .filterByCategory(KnownCategory.DINING)
+        .filterByCategory(KnownCategory.TRAVEL);
+    });
   }
 
   @Test
-  void testFilterByDateRange_basic() {
+  void testFilterByDateRange_basic() throws FilterException {
     ExpenseTrackerView augustExpenses = expenseTrackerView.filterByDateRange(
       LocalDate.parse("2024-08-01"),
       LocalDate.parse("2024-08-31")
@@ -232,16 +242,24 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testFilterByDateRange_noResults() {
-    ExpenseTrackerView noExpenses = expenseTrackerView.filterByDateRange(
-      LocalDate.parse("2024-10-01"),
-      LocalDate.parse("2024-10-31")
-    );
-    assertEquals(0, noExpenses.toList().size());
+  void testFilterByDateRange_null() {
+    assertThrows(InvalidArgumentFilterException.class, () -> expenseTrackerView.filterByDateRange(null, LocalDate.parse("2024-08-11")));
+    assertThrows(InvalidArgumentFilterException.class, () -> expenseTrackerView.filterByDateRange(LocalDate.parse("2024-08-11"), null));
+    assertThrows(InvalidArgumentFilterException.class, () -> expenseTrackerView.filterByDateRange(null, null));
   }
 
   @Test
-  void testFilterByDateRange_all() {
+  void testFilterByDateRange_noResults() {
+    assertThrows(NoResultsFilterException.class, () -> {
+      expenseTrackerView.filterByDateRange(
+        LocalDate.parse("2024-10-01"),
+        LocalDate.parse("2024-10-31")
+      );
+    });
+  }
+
+  @Test
+  void testFilterByDateRange_all() throws FilterException {
     ExpenseTrackerView allExpenses = expenseTrackerView.filterByDateRange(
       LocalDate.parse("2024-01-01"),
       LocalDate.parse("2024-12-31")
@@ -250,7 +268,7 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testFilterByDateRange_startEqualsEnd() {
+  void testFilterByDateRange_startEqualsEnd() throws FilterException {
     ExpenseTrackerView singleDayExpenses = expenseTrackerView.filterByDateRange(
       LocalDate.parse("2024-08-11"),
       LocalDate.parse("2024-08-11")
@@ -261,14 +279,14 @@ public final class ExpenseTrackerViewTests {
 
   @Test
   void testFilterByDateRange_endBeforeStart() {
-    assertThrows(IllegalArgumentException.class, () -> expenseTrackerView.filterByDateRange(
+    assertThrows(InvalidDateRangeFilterException.class, () -> expenseTrackerView.filterByDateRange(
       LocalDate.parse("2024-08-20"),
       LocalDate.parse("2024-08-10")
     ));
   }
 
   @Test
-  void testChainedFilters_categoryThenDate() {
+  void testChainedFilters_categoryThenDate() throws FilterException {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
       .filterByCategory(KnownCategory.DINING)
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-20"));
@@ -279,7 +297,7 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testChainedFilters_dateThenCategory() {
+  void testChainedFilters_dateThenCategory() throws FilterException {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-20"))
       .filterByCategory(KnownCategory.DINING);
@@ -290,7 +308,7 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testChainedFilters_withLimit() {
+  void testChainedFilters_withLimit() throws FilterException {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-31"))
       .limitToAmount(2);
@@ -301,7 +319,7 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
-  void testChainedFilters_complex() {
+  void testChainedFilters_complex() throws FilterException {
     ExpenseTrackerView filteredExpenses = expenseTrackerView
       .filterByCategory(KnownCategory.DINING)
       .filterByDateRange(LocalDate.parse("2024-08-01"), LocalDate.parse("2024-08-31"))
