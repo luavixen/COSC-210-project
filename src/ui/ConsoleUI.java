@@ -17,7 +17,7 @@ import java.util.Scanner;
 /**
  * Provides the console UI for this expense tracking desktop application
  */
-public final class Main {
+public final class ConsoleUI {
 
   private static final ExpenseTracker TRACKER = new ExpenseTracker();
   private static final Scanner SCANNER = new Scanner(System.in);
