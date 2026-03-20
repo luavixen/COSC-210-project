@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,6 +62,7 @@ public final class ExpenseTrackerViewTests {
     assertEquals(1, view.toList().size());
   }
 
+  /*
   @Test
   void testCtor_throwsOnUnsortedList() {
     List<Expense> unsortedList = List.of(
@@ -68,6 +70,20 @@ public final class ExpenseTrackerViewTests {
       new Expense(LocalDate.parse("2024-08-02"), KnownCategory.GROCERIES, BigDecimal.valueOf(180_00, 2), "Loblaws")
     );
     assertThrows(IllegalStateException.class, () -> new ExpenseTrackerView(unsortedList));
+  }
+  */
+
+  @Test
+  void testCtor_allowsUnsortedListAndRemainsUnsorted() {
+    List<Expense> unsortedList = List.of(
+      new Expense(LocalDate.parse("2024-09-01"), KnownCategory.RENT, BigDecimal.valueOf(1200_00, 2), "All Start Ct"),
+      new Expense(LocalDate.parse("2024-08-02"), KnownCategory.GROCERIES, BigDecimal.valueOf(180_00, 2), "Loblaws")
+    );
+    assertDoesNotThrow(() -> new ExpenseTrackerView(unsortedList));
+    ExpenseTrackerView view = new ExpenseTrackerView(unsortedList);
+    assertEquals(2, view.toList().size());
+    assertEquals(KnownCategory.RENT, view.toList().getFirst().getCategory());
+    assertEquals(KnownCategory.GROCERIES, view.toList().getLast().getCategory());
   }
 
   private ExpenseTrackerView expenseTrackerView;
@@ -151,6 +167,27 @@ public final class ExpenseTrackerViewTests {
     } catch (UnsupportedOperationException ignored) {}
 
     assertEquals(5, expenseTrackerView.toList().size());
+  }
+
+  @Test
+  void testGetCategories_size() {
+    assertEquals(4, expenseTrackerView.getCategories().size());
+  }
+
+  @Test
+  void testGetCategories_isExactly() {
+    assertEquals(Set.of(KnownCategory.GROCERIES, KnownCategory.DINING, KnownCategory.RENT, KnownCategory.PAYMENT), expenseTrackerView.getCategories());
+  }
+
+  @Test
+  void testGetCategories_containsOnlyCategoriesInUse() {
+    assertTrue(expenseTrackerView.getCategories().contains(KnownCategory.GROCERIES));
+    assertTrue(expenseTrackerView.getCategories().contains(KnownCategory.DINING));
+    assertTrue(expenseTrackerView.getCategories().contains(KnownCategory.RENT));
+    assertTrue(expenseTrackerView.getCategories().contains(KnownCategory.PAYMENT));
+    assertFalse(expenseTrackerView.getCategories().contains(KnownCategory.ENTERTAINMENT));
+    assertFalse(expenseTrackerView.getCategories().contains(KnownCategory.HEALTH));
+    assertFalse(expenseTrackerView.getCategories().contains(new CustomCategory("Something Else")));
   }
 
   @Test

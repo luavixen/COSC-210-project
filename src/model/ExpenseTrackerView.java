@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Expense tracker view - represents a selection of expenses that were pulled from an expense tracker
@@ -12,23 +14,10 @@ public final class ExpenseTrackerView {
   private final List<Expense> expenses;
 
   // MODIFIES: NOTHING
-  // REQUIRES: that expenses be sorted in ascending order by date
-  // EFFECTS: **copies** the given list of expenses and creates an shallow-immutable view over them
+  // EFFECTS: **copies** the given list of expenses and creates a shallow-immutable view over them
   public ExpenseTrackerView(List<Expense> expenses) {
     Objects.requireNonNull(expenses);
-
     this.expenses = List.copyOf(expenses);
-
-    LocalDate previousDate = null;
-    for (Expense expense : this.expenses) {
-      if (
-        previousDate != null &&
-        previousDate.isAfter(expense.getDate())
-      ) {
-        throw new IllegalStateException("ExpenseTrackerView expenses must be sorted in ascending order by date");
-      }
-      previousDate = expense.getDate();
-    }
   }
 
   // MODIFIES: NOTHING
@@ -111,6 +100,30 @@ public final class ExpenseTrackerView {
   // EFFECTS: returns a new **copied** list of the expenses in this (possibly filtered) view in ascending order by date
   public List<Expense> toList() {
     return List.copyOf(expenses);
+  }
+
+  // MODIFIES: NOTHING
+  // EFFECTS: returns the number of expenses in this (possibly filtered) view
+  public int getSize() {
+    return expenses.size();
+  }
+
+  // MODIFIES: NOTHING
+  // EFFECTS: returns the expense at the given index in this (possibly filtered) view, or null if the index is out of bounds
+  public Expense getExpenseAt(int index) {
+    if (index >= 0 && index < expenses.size()) {
+      return expenses.get(index);
+    }
+    return null;
+  }
+
+  // MODIFIES: NOTHING
+  // EFFECTS: returns a new **copied** immutable set of the categories in the expenses in this (possibly filtered) view
+  public Set<Category> getCategories() {
+    return expenses
+      .stream()
+      .map(Expense::getCategory)
+      .collect(Collectors.toUnmodifiableSet());
   }
 
 }
