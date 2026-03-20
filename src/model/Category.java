@@ -28,7 +28,7 @@ public abstract class Category {
     return KnownCategory.ALL_KNOWN_CATEGORIES
       .stream()
       .map(category -> (Category) category)
-      .filter(category -> category.getName().equals(name))
+      .filter(category -> category.getName().equalsIgnoreCase(name))
       .findFirst()
       .orElseGet(() -> new CustomCategory(name));
   }
