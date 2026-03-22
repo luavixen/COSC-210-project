@@ -3,8 +3,7 @@ package tests;
 import model.KnownCategory;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for the KnownCategory class to confirm name functionality
@@ -26,27 +25,33 @@ public final class KnownCategoryTests {
   }
 
   @Test
-  void testAllKnownCategories() {
-    assertEquals(10, KnownCategory.ALL_KNOWN_CATEGORIES.size());
+  void testKnownCategories() {
+    assertEquals(10, KnownCategory.KNOWN_CATEGORIES.size());
+  }
+
+  @Test
+  void testValues() {
+    assertEquals(10, KnownCategory.values().length);
+    assertArrayEquals(KnownCategory.values(), KnownCategory.KNOWN_CATEGORIES.toArray(new KnownCategory[0]));
   }
 
   @Test
   void testIsCustom() {
-    for (KnownCategory category : KnownCategory.ALL_KNOWN_CATEGORIES) {
+    for (KnownCategory category : KnownCategory.KNOWN_CATEGORIES) {
       assertFalse(category.isCustom());
     }
   }
 
   @Test
   void testToString() {
-    for (KnownCategory category : KnownCategory.ALL_KNOWN_CATEGORIES) {
+    for (KnownCategory category : KnownCategory.KNOWN_CATEGORIES) {
       assertEquals(category.getName(), category.toString());
     }
   }
 
   @Test
   void testEquals() {
-    for (KnownCategory category : KnownCategory.ALL_KNOWN_CATEGORIES) {
+    for (KnownCategory category : KnownCategory.KNOWN_CATEGORIES) {
       assertEquals(category, KnownCategory.fromName(category.getName()));
     }
   }

@@ -36,8 +36,12 @@ public final class KnownCategory extends Category {
   public static final KnownCategory TRAVEL = new KnownCategory("Travel");
   public static final KnownCategory PAYMENT = new KnownCategory("Payment");
 
-  public static final List<KnownCategory> ALL_KNOWN_CATEGORIES = List.of( // immutable
+  public static final List<KnownCategory> KNOWN_CATEGORIES = List.of( // immutable
     GROCERIES, TRANSPORTATION, HEALTH, EDUCATION, UTILITIES, RENT, DINING, ENTERTAINMENT, TRAVEL, PAYMENT
   );
+
+  public static KnownCategory[] values() {
+    return KNOWN_CATEGORIES.toArray(new KnownCategory[0]);
+  }
 
 }

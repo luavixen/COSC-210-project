@@ -295,7 +295,7 @@ public final class ConsoleUI {
   }
 
   private static Category promptForCategory() {
-    Category[] categories = KnownCategory.ALL_KNOWN_CATEGORIES.toArray(new Category[0]);
+    Category[] categories = KnownCategory.KNOWN_CATEGORIES.toArray(new Category[0]);
     System.out.println("\nCategories:");
     for (int i = 0; i < categories.length; i++) {
       System.out.println((i + 1) + ". " + categories[i].getName());

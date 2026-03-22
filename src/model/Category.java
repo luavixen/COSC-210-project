@@ -25,7 +25,7 @@ public abstract class Category {
 
   public static Category fromName(String name) {
     Objects.requireNonNull(name);
-    return KnownCategory.ALL_KNOWN_CATEGORIES
+    return KnownCategory.KNOWN_CATEGORIES
       .stream()
       .map(category -> (Category) category)
       .filter(category -> category.getName().equalsIgnoreCase(name))
