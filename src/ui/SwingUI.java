@@ -23,6 +23,9 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Provides the GUI (via Swing) for this expense tracking desktop application
+ */
 public final class SwingUI extends JFrame {
 
   private final ExpenseTracker tracker = new ExpenseTracker();
