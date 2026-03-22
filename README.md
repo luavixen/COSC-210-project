@@ -61,3 +61,46 @@ Note that I've highlighted elements of the user stories for easy identification.
 - Class fields are underlined
 
 As this is a solo project, I *(Lua)* will be responsible for implementing all the features outlined in the user stories.
+
+## Instructions for End User
+
+You can view the panel that displays the **expenses** that have already been added to the **expense tracker** simply by opening the application.
+You will be presented with a window that looks like this:
+
+![](./screenshot-main.png)
+
+The current **expense tracker** is displayed in a spreadsheet-like format.
+You can select an **expense** by clicking on it.
+You can also filter the **expense tracker** by selecting a category or date range.
+
+Note the buttons across the top of the window. This is the application's toolbar.
+
+Using these buttons, you can perform a number of operations:
+* **\[Save\]** - Opens a file dialog to save the **expenses** and **expense tracker** to a file for later usage, as a .json file
+* **\[Load\]** - Opens a file dialog to load up your previously saved **expenses** and **expense tracker**, from a .json file
+* **\[Insert\]** - Opens a form dialog that, once filled out with the correctly formatted values, adds an **expense** to the **expense tracker**
+* **\[Delete\]** - Deletes the selected **expense** from the **expense tracker**
+* **\[Filter\]** - Filters the **expense tracker** by a date range. You'll need to input two dates in the format "YYYY-MM-DD" into the "From:" and "To:" fields.
+* **\[Clear\]** - Clears the date range filter if it's currently applied
+
+Note the category filter box. If you select a category, only expenses with that category will be displayed.
+
+As for the form dialog that appears when you click the **\[Insert\]** button, it'll look something like this:
+
+![](./screenshot-insert.png)
+
+To insert an **expense** into the **expense tracker**, you'll need to input the following values:
+* **Date:** The date of the expense,
+* **Category:** The category of the expense,
+* **Amount:** The amount of the expense,
+* **Description:** A description of the expense.
+
+Of course, you can also edit the values of an existing **expense** by clicking on it in the spreadsheet-like view.
+Your changes will be written into the **expense tracker**.
+
+Once you've finished adding expenses, you can save your **expense tracker** to a file by clicking the **\[Save\]** button.
+You can load up your previously saved **expense tracker** by clicking the **\[Load\]** button.
+
+Finally, please note the funny little thumbs up emoji in the bottom right corner of the main window.
+He's there to encourage you and reassure you that everything is going to be okay!
+Financial stress can be super difficult, especially as a student, so it's nice to have a little encouragement.
