@@ -55,9 +55,9 @@ public final class ConsoleUI {
   }
 
   private static void printWelcome() {
-    System.out.println("╔══════════════════════════════════════╗");
-    System.out.println("║ COSC 210 - Lua's Expense Tracker :3c ║");
-    System.out.println("╚══════════════════════════════════════╝");
+    System.out.println("╔══════════════════════════════════╗");
+    System.out.println("║ COSC 210 - Lua's Expense Tracker ║");
+    System.out.println("╚══════════════════════════════════╝");
     System.out.println();
   }
 
