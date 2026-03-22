@@ -104,8 +104,14 @@ public final class ExpenseTrackerView {
 
   // MODIFIES: NOTHING
   // EFFECTS: returns the number of expenses in this (possibly filtered) view
-  public int getSize() {
+  public int size() {
     return expenses.size();
+  }
+
+  // MODIFIES: NOTHING
+  // EFFECTS: returns true if this (possibly filtered) view is empty, false otherwise
+  public boolean isEmpty() {
+    return expenses.isEmpty();
   }
 
   // MODIFIES: NOTHING

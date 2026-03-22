@@ -135,6 +135,41 @@ public final class ExpenseTrackerViewTests {
   }
 
   @Test
+  void testSize_basic() {
+    assertEquals(5, expenseTrackerView.size());
+  }
+
+  @Test
+  void testSize_empty() {
+    ExpenseTrackerView noExpenses = new ExpenseTrackerView(List.of());
+    assertEquals(0, noExpenses.size());
+  }
+
+  @Test
+  void testIsEmpty_basic() {
+    assertFalse(expenseTrackerView.isEmpty());
+  }
+
+  @Test
+  void testIsEmpty_empty() {
+    ExpenseTrackerView noExpenses = new ExpenseTrackerView(List.of());
+    assertTrue(noExpenses.isEmpty());
+  }
+
+  @Test
+  void testGetExpenseAt_basic() {
+    assertEquals(KnownCategory.GROCERIES, expenseTrackerView.getExpenseAt(0).getCategory());
+    assertEquals("McDonald's", expenseTrackerView.getExpenseAt(1).getDescription());
+    assertEquals(LocalDate.parse("2024-09-01"), expenseTrackerView.getExpenseAt(4).getDate());
+  }
+
+  @Test
+  void testGetExpenseAt_outOfBounds() {
+    assertNull(expenseTrackerView.getExpenseAt(5));
+    assertNull(expenseTrackerView.getExpenseAt(-1));
+  }
+
+  @Test
   void testToList_size() {
     List<Expense> expenses = expenseTrackerView.toList();
     assertEquals(5, expenses.size());
