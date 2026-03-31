@@ -104,3 +104,11 @@ You can load up your previously saved **expense tracker** by clicking the **\[Lo
 Finally, please note the funny little thumbs up emoji in the bottom right corner of the main window.
 He's there to encourage you and reassure you that everything is going to be okay!
 Financial stress can be super difficult, especially as a student, so it's nice to have a little encouragement.
+
+# Phase 4: Task 3
+
+![](./UML_Design_Diagram.png)
+
+Here's my UML design diagram for the finished project.
+
+If I had more time and knowledge, I probably would have made the `Expense` class immutable and made the `ExpenseTracker` class use tree structure(s) or similar, like a database, instead of just a `List<Expense>` that I re-sort all the time. I would then remove the `ExpenseTrackerView` class and directly query the `ExpenseTracker`, just like a database! :3
