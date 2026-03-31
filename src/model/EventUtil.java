@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public final class EventUtil {
@@ -8,6 +9,7 @@ public final class EventUtil {
   private EventUtil() { throw new AssertionError(); }
 
   public static EventLog get() {
+    registerShutdownHook();
     return EventLog.getInstance();
   }
 
@@ -21,10 +23,15 @@ public final class EventUtil {
 
   public static void dump() {
     get().forEach(System.out::println);
+    System.out.flush();
   }
 
-  {
-    Runtime.getRuntime().addShutdownHook(new Thread(EventUtil::dump));
+  private static final AtomicBoolean shutdownHookRegistered = new AtomicBoolean(false);
+
+  private static void registerShutdownHook() {
+    if (shutdownHookRegistered.compareAndSet(false, true)) {
+      Runtime.getRuntime().addShutdownHook(new Thread(EventUtil::dump));
+    }
   }
 
 }

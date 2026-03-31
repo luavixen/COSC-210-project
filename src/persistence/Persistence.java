@@ -65,7 +65,7 @@ public final class Persistence {
       .map(jsonExpense -> decodeExpense(new JSONObject((Map<?, ?>) jsonExpense)))
       .toList();
 
-    EventUtil.log("restoreExpenseTracker count:", newExpenseList.size());
+    EventUtil.log("restoreExpenseTracker", newExpenseList.size(), "expenses");
 
     for (Expense oldExpense : tracker.getExpenses().toList()) tracker.deleteExpense(oldExpense);
     for (Expense newExpense : newExpenseList) tracker.addExpense(newExpense);
