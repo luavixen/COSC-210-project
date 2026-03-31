@@ -28,6 +28,7 @@ public final class Expense implements Comparable<Expense> {
 
   public void setDate(LocalDate date) {
     this.date = date;
+    EventUtil.log("Expense.setDate", date, "for", this);
   }
 
   public Category getCategory() {
@@ -36,6 +37,7 @@ public final class Expense implements Comparable<Expense> {
 
   public void setCategory(Category category) {
     this.category = category;
+    EventUtil.log("Expense.setCategory", category, "for", this);
   }
 
   public BigDecimal getAmount() {
@@ -44,6 +46,7 @@ public final class Expense implements Comparable<Expense> {
 
   public void setAmount(BigDecimal amount) {
     this.amount = amount;
+    EventUtil.log("Expense.setAmount", amount, "for", this);
   }
 
   public String getDescription() {
@@ -52,6 +55,7 @@ public final class Expense implements Comparable<Expense> {
 
   public void setDescription(String description) {
     this.description = description;
+    EventUtil.log("Expense.setDescription", description, "for", this);
   }
 
   @Override

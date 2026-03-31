@@ -27,6 +27,7 @@ public final class ExpenseTrackerView {
   //   throws if no expenses match the given category
   public ExpenseTrackerView filterByCategory(Category category) throws FilterException {
     if (category == null) {
+      EventUtil.log("ExpenseTrackerView.filterByCategory null category?");
       throw new InvalidArgumentFilterException("Category is null");
     }
 
@@ -36,9 +37,11 @@ public final class ExpenseTrackerView {
       .toList();
 
     if (filteredExpenses.isEmpty()) {
+      EventUtil.log("ExpenseTrackerView.filterByCategory no expenses for", category);
       throw new NoResultsFilterException("No expenses found for category: " + category);
     }
 
+    EventUtil.log("ExpenseTrackerView.filterByCategory", filteredExpenses.size(), "expenses for", category);
     return new ExpenseTrackerView(filteredExpenses);
   }
 
@@ -49,12 +52,15 @@ public final class ExpenseTrackerView {
   //   throws if no expenses match the given date range, or if startDate is after endDate (invalid)
   public ExpenseTrackerView filterByDateRange(LocalDate startDate, LocalDate endDate) throws FilterException {
     if (startDate == null) {
+      EventUtil.log("ExpenseTrackerView.filterByDateRange null startDate?");
       throw new InvalidArgumentFilterException("Start date is null");
     }
     if (endDate == null) {
+      EventUtil.log("ExpenseTrackerView.filterByDateRange null endDate?");
       throw new InvalidArgumentFilterException("End date is null");
     }
     if (!startDate.isBefore(endDate) && !startDate.isEqual(endDate)) {
+      EventUtil.log("ExpenseTrackerView.filterByDateRange", startDate, "is after", endDate);
       throw new InvalidDateRangeFilterException("Start date must be before or equal to end date");
     }
 
@@ -71,9 +77,11 @@ public final class ExpenseTrackerView {
       .toList();
 
     if (filteredExpenses.isEmpty()) {
+      EventUtil.log("ExpenseTrackerView.filterByDateRange no expenses in date range", startDate, "to", endDate);
       throw new NoResultsFilterException("No expenses found in date range: " + startDate + " to " + endDate);
     }
 
+    EventUtil.log("ExpenseTrackerView.filterByDateRange", filteredExpenses.size(), "expenses in date range", startDate, "to", endDate);
     return new ExpenseTrackerView(filteredExpenses);
   }
 
@@ -84,15 +92,18 @@ public final class ExpenseTrackerView {
   //   throws if no expenses match the given limit, or if limit <= 0 (invalid)
   public ExpenseTrackerView limitToAmount(int limit) throws FilterException {
     if (limit <= 0) {
+      EventUtil.log("ExpenseTrackerView.limitToAmount invalid limit?", limit);
       throw new InvalidArgumentFilterException("Limit must be greater than zero");
     }
 
     List<Expense> filteredExpenses = expenses.subList(0, Math.min(limit, expenses.size()));
 
     if (filteredExpenses.isEmpty()) {
+      EventUtil.log("ExpenseTrackerView.limitToAmount no expenses");
       throw new NoResultsFilterException("No expenses found");
     }
 
+    EventUtil.log("ExpenseTrackerView.limitToAmount", filteredExpenses.size(), "expenses");
     return new ExpenseTrackerView(filteredExpenses);
   }
 

@@ -1,6 +1,7 @@
 package persistence;
 
 import model.Category;
+import model.EventUtil;
 import model.Expense;
 import model.ExpenseTracker;
 import org.json.JSONArray;
@@ -64,6 +65,8 @@ public final class Persistence {
       .map(jsonExpense -> decodeExpense(new JSONObject((Map<?, ?>) jsonExpense)))
       .toList();
 
+    EventUtil.log("restoreExpenseTracker count:", newExpenseList.size());
+
     for (Expense oldExpense : tracker.getExpenses().toList()) tracker.deleteExpense(oldExpense);
     for (Expense newExpense : newExpenseList) tracker.addExpense(newExpense);
   }
@@ -71,8 +74,12 @@ public final class Persistence {
   // MODIFIES: NOTHING
   // EFFECTS: saves an expense tracker to a file at the specified path
   public static void saveExpenseTrackerToFile(ExpenseTracker tracker, Path path) throws IOException {
-    String json = encodeExpenseTracker(tracker).toString();
-    Files.writeString(path, json);
+    try {
+      String json = encodeExpenseTracker(tracker).toString();
+      Files.writeString(path, json);
+    } finally {
+      EventUtil.log("saveExpenseTrackerToFile", path);
+    }
   }
 
   // MODIFIES: tracker
@@ -81,8 +88,12 @@ public final class Persistence {
   //          2. deletes all expenses in the tracker
   //          3. adds all expenses from the JSON array to the tracker
   public static void restoreExpenseTrackerFromFile(ExpenseTracker tracker, Path path) throws IOException {
-    String json = Files.readString(path);
-    restoreExpenseTracker(tracker, new JSONArray(json));
+    try {
+      String json = Files.readString(path);
+      restoreExpenseTracker(tracker, new JSONArray(json));
+    } finally {
+      EventUtil.log("restoreExpenseTrackerFromFile", path);
+    }
   }
 
 }

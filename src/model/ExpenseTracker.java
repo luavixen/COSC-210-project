@@ -28,8 +28,10 @@ public final class ExpenseTracker {
   // EFFECTS: tries to add an expense to the expense tracker, returns true on success, false on duplicate
   public boolean addExpense(Expense expense) {
     if (expenses.contains(expense)) {
+      EventUtil.log("ExpenseTracker.addExpense duplicate expense", expense);
       return false;
     } else {
+      EventUtil.log("ExpenseTracker.addExpense", expense);
       expenses.add(expense);
       // NOTE: always sort expenses after mutation
       Collections.sort(expenses);
@@ -40,7 +42,13 @@ public final class ExpenseTracker {
   // MODIFIES: the expense tracker's expense list
   // EFFECTS: tries to remove an expense from the expense tracker, returns true on success, false on not present
   public boolean deleteExpense(Expense expense) {
-    return expenses.remove(expense);
+    if (expenses.remove(expense)) {
+      EventUtil.log("ExpenseTracker.deleteExpense", expense);
+      return true;
+    } else {
+      EventUtil.log("ExpenseTracker.deleteExpense not present", expense);
+      return false;
+    }
   }
 
   // MODIFIES: NOTHING
